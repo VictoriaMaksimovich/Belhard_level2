@@ -22,7 +22,6 @@
 о победителе.
 
 """
-import random
 
 
 class Hero:
