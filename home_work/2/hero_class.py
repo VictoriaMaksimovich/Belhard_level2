@@ -45,16 +45,9 @@ import random
 from hero import Hero
 
 
-class Special(Hero):
-    """ Данный класс описывает специальные свойства героев """
-    def __init__(self,
-                 name: str,
-                 health: int,
-                 armor: int,
-                 strong: int,
-                 special_points: int,
-                 special_points_name: str,
-                 special_points_k: int,
+class SpecialAbilities(Hero):
+    def __init__(self, name: str, health: int, armor: int, strong: int,
+                 special_points: int, special_points_name: str, special_points_k: int,
                  ):
         super().__init__(name, health, armor, strong)
         self.special_points = special_points
@@ -62,76 +55,60 @@ class Special(Hero):
         self.special_points_k = special_points_k
 
     def hello(self):
-        print(f'I am {self.name}. My health: {self.health}, armor: {self.armor}, strong: {self.strong}')
+        print(f'Hero {self.name} in the arena')
 
-    def special_attack(self):
+    def special_attack(self, enemy):
         if self.special_points > 0:
-            special_kick = self.strong * self.special_points_k
+            enemy.health -= self.strong * self.special_points_k
             self.special_points -= 1
-        return special_kick
-
-    def attack(self):
-        att = self.strong
-        special_att = self.special_attack()
-        attack_choise = att if random.random() < 1/4 else special_att
-        if attack_choise == att:
-            print(f'{self.name} attacks')
+            print(f'{self.name}: SUPERATTACK!')
         else:
-            print(f'{self.name} attacks. SPECIAL ATTACK!')
+            self.kick(enemy)
+
+    def attack(self, enemy):
+        self.special_attack(enemy) if random.random() < 1/4 else self.kick(enemy)
 
 
-class Mage(Special):
-    def __init__(self,
-                 name: str,
-                 health: int,
-                 armor: int,
-                 strong: int,
-                 special_points: int,
-                 special_points_name: str,
-                 special_points_k: int,
+class Mage(SpecialAbilities):
+    def __init__(self, name: str, health: int, armor: int, strong: int,
+                 special_points: int, special_points_name: str, special_points_k: int,
                  ):
         super().__init__(name, health, armor, strong, special_points, special_points_name, special_points_k)
-
-    def get_sp_name(self):
-        return self.special_points_name
-
-    def set_sp_name(self):
+        self.special_points = 10
         self.special_points_name = 'mana'
+        self.special_points_k = 3
 
 
-class Knight(Special):
-    def __init__(self,
-                 name: str,
-                 health: int,
-                 armor: int,
-                 strong: int,
-                 special_points: int,
-                 special_points_name: str,
-                 special_points_k: int,
+class Knight(SpecialAbilities):
+    def __init__(self, name: str, health: int, armor: int, strong: int,
+                 special_points: int, special_points_name: str, special_points_k: int,
                  ):
         super().__init__(name, health, armor, strong, special_points, special_points_name, special_points_k)
-
-    def get_sp_name(self):
-        return self.special_points_name
-
-    def set_sp_name(self):
+        self.special_points = 12
         self.special_points_name = 'valor'
+        self.special_points_k = 2
 
 
-class Ork(Special):
-    def __init__(self,
-                 name: str,
-                 health: int,
-                 armor: int,
-                 strong: int,
-                 special_points: int,
-                 special_points_name: str,
-                 special_points_k: int,
+class Ork(SpecialAbilities):
+    def __init__(self, name: str, health: int, armor: int, strong: int,
+                 special_points: int, special_points_name: str, special_points_k: int,
                  ):
         super().__init__(name, health, armor, strong, special_points, special_points_name, special_points_k)
-
-    def get_sp_name(self):
-        return self.special_points_name
-
-    def set_sp_name(self):
+        self.special_points = 5
         self.special_points_name = 'fury'
+        self.special_points_k = 3
+
+
+class Arena:
+    def __init__(self, warriors=None):
+        if warriors is None:
+            warriors = [None] * 3
+        self.warriors = warriors
+
+    def add_warrior(self, warrior):
+        if warrior not in self.warriors:
+            self.warriors.append(warrior)
+            print(f'{warrior} участвует в битве')
+        else:
+            print(f'Воин {warrior} уже на арене')
+
