@@ -35,32 +35,32 @@ class Hero:
         print(f'Name:{self.name} Health:{self.health} Armor:{self.armor} Strong:{self.strong}')
 
     def kick(self, enemy: 'Hero', kick_k=1):
-        print(f'{enemy.name} attacks!')
-        if self.armor > 0:
-            self.armor -= enemy.strong * kick_k
-            if self.armor < 0:
-                self.health += self.armor
+        print(f'{self.name} атакует с силой {self.strong * kick_k}')
+        if enemy.armor > 0:
+            enemy.armor -= self.strong * kick_k
+            if enemy.armor < 0:
+                enemy.health += enemy.armor
         else:
-            self.health -= enemy.strong * kick_k
-        print(f'{self.name} was attacked. Health:{self.health}')
+            enemy.health -= self.strong * kick_k
+        print(f'Герой {enemy.name} был атакован. Здоровье:{enemy.health}')
 
     def fight(self, enemy: 'Hero'):
         while self.health or enemy.health > 0:
             self.kick(enemy)
             enemy.kick(self)
             if self.health <= 0:
-                print(f'{self.name} is dead')
+                print(f'Герой {self.name} пал в бою')
                 break
             elif enemy.health <= 0:
-                print(f'{enemy.name} is dead')
+                print(f'Герой {enemy.name} пал в бою')
                 break
 
     
-knight = Hero('Edmund', 150, 150, 70)
+knight = Hero('Edmund', 150, 100, 70)
 witch = Hero('Jara', 90, 30, 120)
 
-knight.print_info()
-witch.print_info()
-knight.kick(witch, 2)
-witch.fight(knight)
+# knight.print_info()
+# witch.print_info()
+# knight.kick(witch, 2)
+# witch.fight(knight)
 

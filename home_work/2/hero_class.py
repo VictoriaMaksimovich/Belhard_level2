@@ -46,57 +46,46 @@ from hero import Hero
 
 
 class SpecialAbilities(Hero):
-    def __init__(self, name: str, health: int, armor: int, strong: int,
-                 special_points: int, special_points_name: str, special_points_k: int,
-                 ):
+    """Данный класс описывает специальные способности героев"""
+
+    special_points = None
+    special_points_name = None
+    special_points_k = None
+
+    def __init__(self, name: str, health: int, armor: int, strong: int):
         super().__init__(name, health, armor, strong)
-        self.special_points = special_points
-        self.special_points_name = special_points_name
-        self.special_points_k = special_points_k
 
     def hello(self):
         print(f'Hero {self.name} in the arena')
 
     def special_attack(self, enemy):
-        if self.special_points > 0:
-            enemy.health -= self.strong * self.special_points_k
-            self.special_points -= 1
-            print(f'{self.name}: SUPERATTACK!')
-        else:
+        if self.special_points < 0:
             self.kick(enemy)
+        else:
+            enemy.health -= (self.strong * self.special_points_k)
+            self.special_points -= 1
+            print(f'{self.name} использует {self.special_points_name} с силой {self.strong * self.special_points_k}')
 
     def attack(self, enemy):
-        self.special_attack(enemy) if random.random() < 1/4 else self.kick(enemy)
+        self.special_attack(enemy) if random.random() < 1 / 4 else self.kick(enemy)
 
 
 class Mage(SpecialAbilities):
-    def __init__(self, name: str, health: int, armor: int, strong: int,
-                 special_points: int, special_points_name: str, special_points_k: int,
-                 ):
-        super().__init__(name, health, armor, strong, special_points, special_points_name, special_points_k)
-        self.special_points = 10
-        self.special_points_name = 'mana'
-        self.special_points_k = 3
+    special_points = 5
+    special_points_name = 'mana'
+    special_points_k = 3
 
 
 class Knight(SpecialAbilities):
-    def __init__(self, name: str, health: int, armor: int, strong: int,
-                 special_points: int, special_points_name: str, special_points_k: int,
-                 ):
-        super().__init__(name, health, armor, strong, special_points, special_points_name, special_points_k)
-        self.special_points = 12
-        self.special_points_name = 'valor'
-        self.special_points_k = 2
+    special_points = 7
+    special_points_name = 'valor'
+    special_points_k = 2
 
 
 class Ork(SpecialAbilities):
-    def __init__(self, name: str, health: int, armor: int, strong: int,
-                 special_points: int, special_points_name: str, special_points_k: int,
-                 ):
-        super().__init__(name, health, armor, strong, special_points, special_points_name, special_points_k)
-        self.special_points = 5
-        self.special_points_name = 'fury'
-        self.special_points_k = 3
+    special_points = 6
+    special_points_name = 'fury'
+    special_points_k = 3
 
 
 class Arena:
@@ -112,3 +101,25 @@ class Arena:
         else:
             print(f'Воин {warrior} уже на арене')
 
+    def battle(self):
+        if len(self.warriors) > 1:
+            while len(self.warriors) > 1:
+                if len(self.warriors) > 1:
+                    att = random.choice(self.warriors)
+                    defen = random.choice(self.warriors)
+                    if att != defen:
+                        att.attack(defen)
+                        if defen.health <= 0:
+                            print(f'Герой {defen.name} пал в бою')
+                            self.warriors.remove(defen)
+            print(f'Победил воин: {random.choice(self.warriors).name}!')
+        else:
+            print('Количество воинов на арене должно быть больше 1')
+
+
+li_warr = Arena([Knight('Edmund', 150, 100, 50),
+                 Mage('Jara', 90, 50, 80),
+                 Ork('Tror', 110, 90, 50),
+                 ])
+
+li_warr.battle()
