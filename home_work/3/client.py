@@ -23,7 +23,7 @@ HOST = ('127.0.0.1', 7777)
 
 sock.connect(HOST)
 
-# sock.send(b"command:reg; login:alfa11; password:zxc12345")
+send_d = sock.send(b"command:signin; login:alpha11; password:zxc123456")
 # sock.send(b"command:reg; login:beta22; password:vbn45678")
-# sock.send(b"command:reg; login:gamma33; password:qwerty")
+# sock.send(b"command:reg; login:gamma33; password:qwerty789")
 

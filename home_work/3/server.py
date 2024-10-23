@@ -11,6 +11,8 @@
 
         - во всех остальных случаях вывести сообщение:
             "пришли неизвестные  данные по HTTP - путь такой то"
+"""
+"""
 
 
     - если данные пришли НЕ по протоколу http создать возможность след.логики:
@@ -53,32 +55,95 @@ HOST = ('127.0.0.1', 7777)
 sock.bind(HOST)
 sock.listen()
 
-path = ''
+# path = ''
 database = []
+
+
+def pars_http(http_str: str):
+    """Проверка введенных данных для http"""
+    http_str = http_str.split('\n')[0].split()
+    if len(http_str) == 3 and 'HTTP/1.1' in http_str[2]:
+        path_http = http_str[1].strip('/').split('/')
+        return path_http
+
+
+def check_format_str(data_str: str):
+    """
+    Проверка формата введенной строки на наличие логина и пароля.
+    Создание списка данных при успешной проверке.
+    """
+    try:
+        data_str = data_str.split('; ')
+        pars_data = list(map(lambda x: x.split(':'), data_str))
+        if pars_data[0][0] == 'command' and pars_data[1][0] == 'login' and pars_data[2][0] == 'password':
+            pars_data_reg = [pars_data[0][1], pars_data[1][1], pars_data[2][1]]
+            return pars_data_reg
+        else:
+            print('Неверный формат строки')
+    except Exception:
+        print('Неверный формат строки')
+
+
+def check_login(parsed_data: list):
+    """Проверка правильности логина"""
+    logg = parsed_data[1]
+    if len(logg) >= 6 and all(x.isalnum() for x in logg):
+        return logg
+    else:
+        raise ValueError(print(f'{date_now} - ошибка регистрации {logg} - неверный логин'))
+
+
+def check_password(parsed_data: list):
+    """Проверка правильности пароля"""
+    passw = parsed_data[2]
+    if len(passw) >= 8 and any(True for x in passw if x.isdigit()):
+        return passw
+    else:
+        raise ValueError(print(f'{date_now} - ошибка регистрации {parsed_data[1]} - неверный пароль'))
+
+
+def check_signin(datab: list, parsed_str: list):
+    """Проверка наличия пользователя в базе данных"""
+    for i in range(len(datab)):
+        if datab[i]['login'] == parsed_str[1] and datab[i]['password'] == parsed_str[2]:
+            print(f'{date_now} - пользователь {parsed_str[1]} произведен вход')
+        elif datab[i]['login'] != parsed_str[1]:
+            print(f'{date_now} - неверный логин')
+        elif datab[i]['login'] == parsed_str[1] and datab[i]['password'] != parsed_str[2]:
+            print(f'{date_now} - пользователь {parsed_str[1]} неверный пароль')
+        else:
+            print(f'{date_now} - пользователь login: {parsed_str[1]} не найден')
+            return parsed_str[1]
+
 
 while True:
     conn, addr = sock.accept()
     data = conn.recv(1024).decode()
-    if 'HTTP' in data.split('\n')[0].split()[2]:
-        path = data.split('\n')[0].split()[1]
-        if path == '/test/<int>/':
-            print(f'Тест с номером {path.split('/')[2]} запущен')
-        elif path == 'message/<login>/<text>/':
-            print(f'{date_now} - сообщение от пользователя {path.split('/')[1]} - {path.split('/')[2]}')
+    try:
+        parsed_http = pars_http(data)
+        if parsed_http[0] == 'test' and parsed_http[1].isdigit():
+            print(f'Тест с номером {parsed_http[1]} запущен')
+        elif parsed_http[0] == 'message' and len(parsed_http) == 3:
+            print(f'{date_now} - сообщение от пользователя {parsed_http[0]} - {parsed_http[1]}')
         else:
-            print(f'Пришли неизвестные  данные по HTTP - путь {path}')
-    else:
-        data = data.split('; ')
-        data_n = list(map(lambda x: x.split(':'), data))
-        if len(data_n[1][1]) >= 6 and all(x.isalnum() for x in data_n[1][1]):
-            if len(data_n[2][1]) >= 8 and any(True for x in data_n[2][1] if x.isdigit()):
-                database.append(data_n)
+            print(f'Пришли неизвестные данные по HTTP - путь /{'/'.join(parsed_http)}/')
+    except Exception:
+        res = 'Данные получены не по HTTP'
+        print(res)
+
+    if res:
+        user = {}
+        try:
+            parsed_str_reg = check_format_str(data)
+            if parsed_str_reg[0] == 'reg':
+                str_login = check_login(parsed_str_reg)
+                str_passw = check_password(parsed_str_reg)
+                user['login'] = str_login
+                user['password'] = str_passw
+                database.append(user)
                 print(database)
-                print(print(f'{date_now} - пользователь {data_n[1][1]} зарегистрирован'))
-            else:
-                print(f'{date_now} - ошибка регистрации {data_n[1][1]} - неверный пароль')
-        else:
-            print(f'{date_now} - ошибка регистрации {data_n[1][1]} - неверный логин')
-
-
-
+                print(f'{date_now} - пользователь {str_login} зарегистрирован')
+            elif parsed_str_reg[0] == 'signin':
+                signin = check_signin(database, parsed_str_reg)
+        except Exception:
+            print(f'пришли неизвестные  данные - {data}')
