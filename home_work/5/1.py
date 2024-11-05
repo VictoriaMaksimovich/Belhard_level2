@@ -1,35 +1,29 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, session, request, redirect
 from get_info import *
 import re
-
-'''
-Написать веб-приложение на Flask со след ендпоинтами:
-    - главная страница
-    - /duck/ - отображает заголовок рандомная утка №ххх и картинка утки 
-                которую получает по API https://random-d.uk/
-
-    - /fox/<int>/ - аналогично утке только с лисой (- https://randomfox.ca), 
-                    но количество разных картинок определено int. 
-                    если int больше 10 или меньше 1 - вывести сообщение об ошибке
-
-    - /weather-minsk/ - показывает погоду в минске
-
-    - /weather/<city>/ - показывает погоду в городе указанного в city
-
-    - по желанию добавить еще один ендпоинт на любую тему 
+import os
 
 
-Добавить обработчик ошибки 404. (есть в example)
+BASE_FOLDER = os.getcwd()
 
 
-'''
+app = Flask(__name__,
+            static_folder=os.path.join(BASE_FOLDER, 'static'),
+            template_folder=os.path.join(BASE_FOLDER, 'templates'))
 
-app = Flask(__name__)
+app.config['SECRET_KEY'] = 'jhv;cd59-687fh;fd-1713erd!!r;gh-o8yh;gh:vjh-!-g67r:ff'
 
 
 @app.route('/')
 def index():
+    session['num_1'] = 0
+    session['num_2'] = 0
     return render_template('index.html')
+
+
+@app.route('/form/')
+def log_form():
+    render_template('form.html')
 
 
 @app.route('/duck/')
@@ -78,9 +72,28 @@ def weather_city(city):
     return render_template('weather_city.html', city=city, weather=weather)
 
 
+@app.route('/click/')
+def click_picture():
+    url_1 = '/click/1/'
+    url_2 = '/click/2/'
+    return render_template('click.html', url_1=url_1, url_2=url_2, num_1=num_1, num_2=num_2)
+
+
+@app.route('/click/1/')
+def click_1():
+    session['num_1'] += 1
+    return redirect('/click/')
+
+
+@app.route('/click/2/')
+def click_2():
+    session['num_2'] += 1
+    return redirect('/click/')
+
+
 @app.errorhandler(404)
 def page_not_found(error):
-    return '<h1 style="color:red">такой страницы не существует</h1>'
+    return render_template('error.html')
 
 
 if __name__ == "__main__":
