@@ -1,10 +1,10 @@
 body {
-    background: #f7eadf;
+    background: #FFF5EE;
 }
 
 img {
-   width: 920px;
-   margin-left: 200px;
+   width: 300px;
+   margin-left: 100px;
 }
 
 h2 {
@@ -13,7 +13,7 @@ h2 {
 
 aside {
     float: left;
-    background: #A52A2A;
+    background: #CD853F;
     width: 200px;
     padding: 1.0%;
     height: 100vh;
@@ -23,14 +23,14 @@ aside {
 aside h3 {
     margin-top: 5px;
     font-size: 25px;
-    margin-left: 5px;
-}
-
-a {
-    text-decoration: none;
+    margin-left: 15px;
 }
 
 aside li {
+    text-decoration: none;
+}
+
+aside li a {
     color: #000000;
     display: block;
     margin-top: 10px;
@@ -39,7 +39,8 @@ aside li {
 }
 
 .topnav {
-    background-color: #A52A2A;
+    margin: auto;
+    background-color: #CD853F;
     overflow: hidden;
 }
 
@@ -47,6 +48,7 @@ aside li {
     float: center;
     color: #000000;
     text-align: center;
+    margin: 10px, 10px, 10px, 10px;
     padding: 20px 20px;
     text-decoration: none;
     font-size: 20px;
@@ -82,4 +84,9 @@ div img {
 
 div p {
 margin-left: 290px;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
 }
