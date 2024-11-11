@@ -1,26 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css//main.css') }}">
-    <title>Главная страница</title>
-</head>
-<body>
-<aside>
-    <h3>Навигация</h3>
-    <ul>
-        <a href="/weather-minsk/"><li>Погода в Минске</li></a>
-        <a href="/weather/<city>/"><li>Погода в городах</li></a>
-        <a href="/click/"><li>Картинка сезона</li></a>
-    </ul>
-</aside>
-<div class="topnav">
-    <a class=active href="/">Главная страница</a>
-    <a href="/duck/">Рандомная уточка</a>
-    <a href="/fox/<int>/">Рандомная лисичка</a>
-</div>
-<h2>Приветствуем на главной странице</h2>
-<img src="https://olimpstroyservis.ru/images/companies/1/KD/foto-2.jpg" alt="house">
-</body>
-</html>
+{% extends 'layout.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h2>Приветствуем на главной странице</h2>
+    <img src="https://olimpstroyservis.ru/images/companies/1/KD/foto-2.jpg" alt="house">
+{% endblock %}

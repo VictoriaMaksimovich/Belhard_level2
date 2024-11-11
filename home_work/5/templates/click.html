@@ -1,36 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css//main.css') }}">
-    <title>Голосование за лучшую картинку</title>
-</head>
-<body>
-<aside>
-    <h3>Навигация</h3>
-    <ul>
-        <a href="/weather-minsk/"><li>Погода в Минске</li></a>
-        <a href="/weather/<city>/"><li>Погода в городах</li></a>
-        <a href="/click/"><li>Голосуй за картинку</li></a>
-    </ul>
-</aside>
-<div class="topnav">
-    <a href="/">Главная страница</a>
-    <a href="/duck/">Рандомная уточка</a>
-    <a class=active href="/fox/<int:count>/">Рандомная лисичка</a>
-</div>
-<div class="wrapper">
-    <div>
-        <img src="{{ url_for('static', filename='img//pumpkin.jpg') }}">
-        <p><a href="{{ url_1 }}">Картинка 1</a></p>
-        <p>{{ num_1 }}</p>
+{% extends 'layout.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="wrapper">
+        <div>
+            <img src="{{ url_for('static', filename='img//pumpkin.jpg') }}">
+            <p><a href="{{ url_1 }}">Картинка 1</a></p>
+            <p>{{ num_1 }}</p>
+        </div>
+        <div>
+            <img src="{{ url_for('static', filename='img//zolotaya-os.jpg') }}">
+            <p><a href="{{ url_2 }}">Картинка 2</a></p>
+            <p>{{ num_2 }}</p>
+        </div>
     </div>
-    <div>
-        <img src="{{ url_for('static', filename='img//zolotaya-os.jpg') }}">
-        <p><a href="{{ url_2 }}">Картинка 2</a></p>
-        <p>{{ num_2 }}</p>
-    </div>
-</div>
-</body>
-</html>
+{% endblock %}

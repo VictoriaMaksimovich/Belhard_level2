@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css//main.css') }}">
+    <title>Форма для регистрации</title>
+</head>
+<body>
+    <nav class="topnav">
+        <a href="/user/create/">Регистрация</a>
+        <a href="/login/">Вход</a>
+    </nav>
+    <div>
+        <form method="post">
+            <p>
+                <label>Логин</label>
+                <input type="text" name="login" placeholder="login">
+            </p>
+            <p>
+                <label>Пароль</label>
+                <input type="password" name="password" placeholder="password">
+            </p>
+            <p><input type="submit" value="Войти"></p>
+            <p><input type="reset" value="Очистить форму"></p>
+        </form>
+    </div>
+    {% if error3 %}
+        <p class="error">Неверный логин или пароль</p>
+    {% endif %}
+</body>
+</html>
