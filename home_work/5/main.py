@@ -65,23 +65,26 @@ def user_create():
 @app.route('/user/login/', methods=["GET", "POST"])
 def user_login():
     if request.method == "POST":
-        login = request.form['login']
-        password = request.form['password']
-        user = db.query(User).filter(User.login == login)
-        if user.password == password:
-            session['name'] = user.name
-            session['user_id'] = user.id
-        else:
-            print('Неверный логин или пароль')
-            return render_template('user/user_login.html')
-        return redirect(url_for("index"))
+        try:
+            login = request.form['login']
+            password = request.form['password']
+            user = User.query.filter_by(login=login).first()
+            if user.password == password:
+                session['name'] = user.name
+                session['user_id'] = user.id
+            else:
+                print('Неверный логин или пароль')
+                return render_template('user/user_login.html')
+            return redirect(url_for("index"))
+        except:
+            return render_template('user/user_create.html')
     return render_template('user/user_login.html')
 
 
 @app.route('/')
 def index():
-    # if 'user_id' not in session:
-    #     return redirect('user/user_login.html')
+    if 'user_id' not in session:
+        return redirect('user/user_login.html')
     session['num_1'] = 0
     session['num_2'] = 0
     return render_template('index.html')
@@ -161,6 +164,11 @@ def click_2():
         return redirect('user/user_login.html')
     session['num_2'] += 1
     return redirect('/click/')
+
+
+@app.route('/homework/')
+def homework():
+    return render_template('homework.html')
 
 
 @app.errorhandler(404)
