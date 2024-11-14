@@ -1,6 +1,5 @@
 import re
-
-from flask import render_template, url_for, session, redirect, request
+from flask import request
 from main import *
 
 error = []
@@ -62,23 +61,5 @@ def check_password():
 #         return error
 
 
-def find_login(login):
-    user = db.get_or_404(User, login)
-    return user
 
-
-# @app.route('/user/login/', methods=["GET", "POST"])
-def user_log():
-    if request.method == "POST":
-        login = request.form.get('login')
-        password = request.form.get('password')
-        user = find_login(login)
-        if user.password == password:
-            session['name'] = user.name
-            session['user_id'] = user.id
-        else:
-            error3 = 'Неверный логин или пароль'
-            return render_template('user/user_login.html', error3=error3)
-        return redirect(url_for("index"))
-    return render_template('user/user_login.html')
 
