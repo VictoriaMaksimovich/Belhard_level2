@@ -1,0 +1,38 @@
+{% extends "index.html" %}
+
+{% block title %}Добавление вопроса{% endblock %}
+
+{% block content2 %}
+    <h2>Форма для добавления вопроса</h2>
+    <div class="question_add">
+        <form action="/question_add/" method="post">
+            <div class="form2">
+                <h2>Заполните представленные ниже поля</h2>
+                <p>
+                    <label for="text">Текст вопроса</label>
+                    <textarea rows="15" cols="45" name="text" id="text"></textarea>
+                </p>
+                <p>
+                    <label>Правильный вариант ответа</label>
+                    <input type="text" name="answer" placeholder="answer">
+                </p>
+                <p>
+                    <label>Неправильный вариант ответа 1</label>
+                    <input type="text" name="wrong1" placeholder="wrong1">
+                </p>
+                <p>
+                    <label>Неправильный вариант ответа 2</label>
+                    <input type="text" name="wrong2" placeholder="wrong2">
+                </p>
+                <p>
+                    <label>Неправильный вариант ответа 3</label>
+                    <input type="text" name="wrong3" placeholder="wrong3">
+                </p>
+                <div>
+                    <input class="button" type="submit" value ='Добавить вопрос'>
+                </div>
+            </div>
+        </form>
+    </div>
+    <p>{{ message }}</p>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+
+{% block title %}Добавление квиза{% endblock %}
+
+{% block content1 %}
+    <h2>Форма для добавления квиза</h2>
+    <div class="quiz_add">
+        <form action="/quiz_add/" method="post">
+            <div class="form2">
+                <h2>Заполните представленные ниже поля</h2>
+                <p>
+                    <label>Название квиза</label>
+                    <input type="text" name="name" placeholder="name">
+                </p>
+                <div>
+                    <input class="button" type="submit" value ='Добавить квиз'>
+                </div>
+            </div>
+        </form>
+    </div>
+    <p>{{ message }}</p>
+{% endblock %}

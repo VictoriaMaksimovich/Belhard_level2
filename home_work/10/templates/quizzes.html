@@ -1,0 +1,8 @@
+{% extends "index.html" %}
+
+{% block main_menu %}
+    <li> <a href="/"> На главную </a></li>
+    {% if html_config['admin'] %}
+    <li> <a href="/quizzes_detail/"> Редактор квизов </a></li>
+    {% endif %}
+{% endblock %}

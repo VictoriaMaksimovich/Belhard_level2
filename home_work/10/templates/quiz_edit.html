@@ -1,0 +1,83 @@
+{% extends "index.html" %}
+
+{% block title %}Редактор квизов{% endblock %}
+
+{% block main_menu %}
+<li><a href="{{ url_for('index') }}">Главная страница</a></li>
+<li><a href="">Вход</a></li>
+<li><a href="">Регистрация</a></li>
+{% endblock %}
+
+{% block content1 %}
+    <h2>Форма для редактирования квизов</h2>
+    <div class="quiz_form">
+        <form action="/quiz_edit/" method="post">
+            <div class="form2">
+                <h2>Выберите квиз для редактирования</h2>
+                <select name="quiz_edit">
+                    {{% for quiz in quizzes %}}
+                        <option value="{{ quiz.id }}">{{ quiz.name }}</option>
+                    {{% endfor %}}
+                </select>
+                <div>
+                    <input class="button" type="submit" value ='Редактировать квиз'>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <a href="#modal-one" class="btn-modal">Добавить квиз</a>
+    <div class="cl1">
+
+    </div>
+    <div class="cl2">
+        <div class="modal" id="modal-one" aria-hidden="true">
+            <a href="#" class="a_modal"></a>
+            <div class="modal-dialog">
+                <div class="modal-header">
+                    Редактировать квиз
+                    <a href="" class="btn-close" aria-hidden="true">×</a>
+                </div>
+                <div class="modal-body">
+                    Заполните поля ниже
+                    <form action="/quiz_add/" method="post">
+                        <fieldset>
+                            <p>
+
+                            </p>
+
+                            <input type="submit">
+
+
+                        </fieldset>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content2 %}
+    <h2>Форма для редактирования вопросов</h2>
+    <div class="quiz_form">
+        <form action="/quiz_edit/" method="post">
+            <div class="form2">
+                <h2>Выберите вопрос для редактирования</h2>
+                <select name="quiz_edit">
+                    {{% for quest in questions %}}
+                        <option value="{{ quest.id }}">{{ quest.name }}</option>
+                    {{% endfor %}}
+                </select>
+                <div>
+                    <input class="button" type="submit" value ='Редактировать вопрос'>
+                </div>
+                <div>
+                    <button><a href="{{ url_for('question_add') }}">Добавить вопрос</a></button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+
+{% block title %}Квизы{% endblock %}
+
+{% block main_menu %}
+    <li><a href="{{ url_for('index') }}">Главная страница</a></li>
+    {% if html_config['admin'] %}
+        <li> <a href="/quiz_edit/">Редактор квизов</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block content1_head %}
+    <h2>Все квизы на сайте</h2>
+{% endblock %}
+
+{% block content1 %}
+<div class="start_form quiz_form">
+    <form action="/quiz/id" method="post">
+        <div class="form1">
+            <h2>Выберите КВИЗ</h2>
+            <select name="quiz">
+                {% for q in quizzes %}
+                    <option value="{{ q.id }}">{{ q.name }}</option>
+                {% endfor%}
+            </select>
+            <div>
+                <input class="button" type="submit" value ='Начать КВИЗ'>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
