@@ -8,7 +8,7 @@ class UserId(BaseModel):
 class UserAdd(BaseModel):
     name: str
     age: int
-    phone: int | None = None
+    phone: str | None = None
 
 
 class User(UserAdd):

@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
+from schema import UserId
 
 app = FastAPI()
 
@@ -18,6 +19,11 @@ async def home():
 @app.post('/')
 async def add_task(task: STaskAdd = Depends()):
     return {"data": task}
+
+
+# @app.get('/user/{id}', response_model=UserId)
+# async def get_user_info(id: int, ):
+
 
 
 if __name__ == '__main__':

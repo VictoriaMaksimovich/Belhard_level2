@@ -1,7 +1,7 @@
 from sqlalchemy import select, String, ForeignKey, Table, Column
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from schema import UserAdd
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, joinedload
+from schema import UserAdd, Quiz
 
 engine = create_async_engine("sqlite+aiosqlite:///db//fastapi.db")
 new_session = async_sessionmaker(engine, expire_on_commit=False)
@@ -113,5 +113,37 @@ class UserRepository:
             res = await session.execute(query)
             user = res.scalars().first()
             return user
+
+
+class QuizRepository:
+
+    @classmethod
+    async def add_quiz(cls, quiz: Quiz):
+        async with new_session as session:
+            data = Quiz.model_dump()
+            quiz = QuizOrm(**data)
+            session.add(quiz)
+            await session.flush()
+            await session.commit()
+            return quiz.id
+
+    @classmethod
+    async def get_quizzes(cls) -> list[QuizOrm]:
+        async with new_session as session:
+            query = select(QuizOrm)
+            res = await session.execute(query)
+            quizzes = res.scalars.all()
+            return quizzes
+
+    @classmethod
+    async def get_quiz(cls, id: int) -> QuizOrm:
+        async with (new_session as session):
+            query = select(QuizOrm).filter(QuizOrm.id == id)
+            rez = await session.execute(query)
+            quiz = rez.scalars().first()
+            return quiz
+            # quiz = session.query(QuizOrm). \
+            #     options(joinedload(QuizOrm.question)).where(QuizOrm.id == id)
+            # return quiz
 
 
