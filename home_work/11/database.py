@@ -1,3 +1,5 @@
+from typing import Sequence
+
 from sqlalchemy import select, String, ForeignKey, Table, Column
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, joinedload
@@ -17,8 +19,7 @@ class UserOrm(Model):
     name: Mapped[str] = mapped_column(String(30))
     age: Mapped[int]
     phone: Mapped[str | None]
-    quizzes = relationship('QuizOrm')
-    # quizzes: Mapped[int] = mapped_column(relationship('QuizOrm'))
+    quizzes = relationship('QuizOrm', back_populates='user')
 
 
 quiz_question = Table('quiz_question', Model.metadata,
@@ -51,7 +52,7 @@ async def delete_tables():
         await conn.run_sync(Model.metadata.drop_all)
 
 
-async def create_table():
+async def create_tables():
     async with engine.begin() as conn:
         await conn.run_sync(Model.metadata.create_all)
 
@@ -84,13 +85,14 @@ async def add_test_data():
         quizzes[2].question.append(questions[2])
 
         session.add_all(quizzes)
+        session.commit()
 
 
 class UserRepository:
 
     @classmethod
     async def add_user(cls, user: UserAdd) -> int:
-        async with new_session as session:
+        async with new_session() as session:
             data = user.model_dump()
             user = UserOrm(**data)
             session.add(user)
@@ -99,8 +101,8 @@ class UserRepository:
             return user.id
 
     @classmethod
-    async def get_users(cls) -> list[UserOrm]:
-        async with new_session as session:
+    async def get_users(cls) -> Sequence[UserOrm]:
+        async with new_session() as session:
             query = select(UserOrm)
             res = await session.execute(query)
             users = res.scalars().all()
@@ -108,7 +110,7 @@ class UserRepository:
 
     @classmethod
     async def get_user(cls, id: int) -> UserOrm:
-        async with new_session as session:
+        async with new_session() as session:
             query = select(UserOrm).filter(UserOrm.id == id)
             res = await session.execute(query)
             user = res.scalars().first()
@@ -119,7 +121,7 @@ class QuizRepository:
 
     @classmethod
     async def add_quiz(cls, quiz: Quiz):
-        async with new_session as session:
+        async with new_session() as session:
             data = Quiz.model_dump()
             quiz = QuizOrm(**data)
             session.add(quiz)
@@ -129,7 +131,7 @@ class QuizRepository:
 
     @classmethod
     async def get_quizzes(cls) -> list[QuizOrm]:
-        async with new_session as session:
+        async with new_session() as session:
             query = select(QuizOrm)
             res = await session.execute(query)
             quizzes = res.scalars.all()
@@ -137,7 +139,7 @@ class QuizRepository:
 
     @classmethod
     async def get_quiz(cls, id: int) -> QuizOrm:
-        async with (new_session as session):
+        async with new_session() as session:
             query = select(QuizOrm).filter(QuizOrm.id == id)
             rez = await session.execute(query)
             quiz = rez.scalars().first()
