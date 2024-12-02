@@ -1,0 +1,25 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Статьи на сайте{% endblock %}
+
+{% block content1_head %}
+    <h1>Статьи на сайте</h1>
+{% endblock %}
+
+{% block content1 %}
+    <div>
+        {% if news %}
+            {% for i in news %}
+                <div class="alert">
+                    <h3>{{ i.title }}</h3>
+                    <footer>Автор: <cite>{{ i.author }}</cite></footer>
+                    <p>{{ i.anons }}</p>
+                    <a href="{% url 'news_view' i.id %}" class="btn btn-info">Читать полный текст</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Статей пока нет</p>
+        {% endif %}
+        <a href="http://127.0.0.1:8000/news/create"><button class="btn">Написать статью</button></a>
+    </div>
+{% endblock %}
