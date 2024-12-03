@@ -1,0 +1,11 @@
+{% extends 'main/layout.html' %}
+
+{% block content1 %}
+    <ul>
+        {% for n in news %}
+            <li>{{ n.title_article }}</li>
+        {% empty %}
+            <li>У вас пока нет статей</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
